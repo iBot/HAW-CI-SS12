@@ -1,0 +1,5 @@
+procedure a(var d,f : string);
+begin
+	print 6;
+	print 4
+end a

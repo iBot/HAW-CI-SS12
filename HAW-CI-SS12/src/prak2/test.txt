@@ -1,0 +1,6 @@
+IF
+1=2
+THEN
+PRINT
+1+2
+END

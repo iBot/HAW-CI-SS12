@@ -1,0 +1,17 @@
+MODULE Sample;
+	var z : integer;
+	PROCEDURE Multiply(VAR z : integer);
+		VAR x, y : integer;
+		BEGIN
+		print 7;
+		print 8;
+		IF (x/2)*2 # x THEN print 7 END;
+		WHILE x > 0 DO
+			print 8;
+			print 7
+		END;
+		PRINT x; PRINT y; PRINT z;
+	END Multiply;
+BEGIN
+	Print 7;
+END Sample.

@@ -1,0 +1,1 @@
+record a,b,c : integer ; a,b,c : integer end

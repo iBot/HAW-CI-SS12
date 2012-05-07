@@ -1,0 +1,13 @@
+module x;
+
+procedure a(var d,f : string);
+begin
+	print 6;
+	print 4
+end a;
+
+
+begin
+	print 8;
+	print 6
+end x.

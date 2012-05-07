@@ -1,0 +1,1 @@
+array [7] of b
