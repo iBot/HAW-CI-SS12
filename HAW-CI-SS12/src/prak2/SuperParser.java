@@ -65,7 +65,7 @@ public class SuperParser {
 	 * Parserroutinen
 	 */
 
-	/******************* Ausdrücke ******************/
+	/******************* AusdrÃ¼cke ******************/
 
 	static void factor() {
 
@@ -606,11 +606,11 @@ public class SuperParser {
 						//expression(); //OK
 						//selector();
 						//factor();
-						ifStatement();
+						//ifStatement();
 						//statement();
 						//string(); //OK
 						//prompt(); //OK
-						//read();
+						read();
 						//assignment("Bla"); //OK
 						//actualParameters(); //OK
 						//procedureCall("Bla"); //OK
@@ -632,7 +632,7 @@ public class SuperParser {
 		System.out.println(spaces + "Assignment: " + nextsymbol);
 		
 		//ident
-		//TODO: ident in Node einfügen
+		//TODO: ident in Node einfï¿½gen
 		
 		//Selector
 		selector();
@@ -687,7 +687,7 @@ public class SuperParser {
 		System.out.println(spaces + "ProcedureCall: " + nextsymbol);
 		
 		//ident
-		//TODO: Identifikator in Node einfügen
+		//TODO: Identifikator in Node einfï¿½gen
 		
 		//'('
 		if(nextsymbol==SuperScanner.lpar){
@@ -997,8 +997,8 @@ public class SuperParser {
 			insymbol(); 
 			
 			//Prompt
-			//TODO: Wie können wir auf String prüfen? Ident ist nicht wirklich = String, oder?
-			if (nextsymbol==SuperScanner.ident) {
+			//TODO: Wie kï¿½nnen wir auf String prï¿½fen? Ident ist nicht wirklich = String, oder?
+			if (nextsymbol==SuperScanner.string) {
 				prompt();
 			}
 		} else {
@@ -1018,9 +1018,9 @@ public class SuperParser {
 		System.out.println(spaces + "Promt: " + nextsymbol);
 		
 		//String
-		//TODO: Wie können wir auf String prüfen? Ident ist nicht wirklich = String, oder?
-		if(nextsymbol==SuperScanner.ident){
-			prompt(); 
+		//TODO: Wie kï¿½nnen wir auf String prï¿½fen? Ident ist nicht wirklich = String, oder?
+		if(nextsymbol==SuperScanner.string){
+			string(); 
 		} else {
 			error("String expected");
 		}

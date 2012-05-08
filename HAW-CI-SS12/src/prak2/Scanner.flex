@@ -92,7 +92,7 @@ INTEGER={DIGIT}+
 \"(![\"\n])*\"							{strval = new String(yytext());
 										 return string;}
 
-{ALPHA}({ALPHA}|{DIGIT}|{BLANK})*	
+{ALPHA}({ALPHA}|{DIGIT})*	
 				{strval = new String(yytext());
 				 return ident;}
 
