@@ -83,8 +83,12 @@ public class SuperParser {
 			insymbol();
 		} else if (nextsymbol == SuperScanner.ident) {
 			outStr(SuperScanner.strval);
-			insymbol();
-		}
+                        insymbol();
+                        selector();
+		} else if (nextsymbol == SuperScanner.string){
+                        
+                    string();
+                }
 		unindent();
 	}
 
@@ -604,16 +608,20 @@ public class SuperParser {
 						//term(); //OK
 						//simpleExpr(); //OK
 						//expression(); //OK
-						//selector();
-						//factor();
-						//ifStatement();
-						//statement();
+						//selector();   //OK
+						//factor();     //OK
+						//ifStatement();    //OK
+                                                //whileStatement();   //OK
+                                                //repeatStatement();  //OK
+						//statement();  //OK
+                                                //statementSequence();    //OK
 						//string(); //OK
 						//prompt(); //OK
-						read();
+						//read();   //OK
 						//assignment("Bla"); //OK
 						//actualParameters(); //OK
 						//procedureCall("Bla"); //OK
+                                            
 					}
 					//	          
 					// Und hier ist Schluss
