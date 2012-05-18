@@ -32,10 +32,12 @@ public class ActualParametersNode extends AbstractNode{
 
     @Override
     public void print() {
+        indent();
         System.out.println(String.format("ActualParamterNode (l:%d c:%d)",line,column));
         for (ExpressionNode expressionNode : expressions) {
             expressionNode.print();
         }
+        unindent();
     }
     
 }

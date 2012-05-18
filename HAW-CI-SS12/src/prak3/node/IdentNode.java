@@ -19,8 +19,9 @@ public class IdentNode extends AbstractNode {
 
 	@Override
 	public void print() {
-		// TODO Auto-generated method stub
-
+		indent();
+			System.out.format("Indent: %s, Zeile: %s, Spalte: %s",name,line,column);
+		unindent();
 	}
 
 }

@@ -28,8 +28,10 @@ public class RepeatStatementNode extends AbstractNode{
 
     @Override
     public void print() {
+        indent();
         System.out.println(String.format("RepeatStatementNode (l:%d c:%d)",line,column));
         statements.print();
         expression.print();
+        unindent();
     }
 }

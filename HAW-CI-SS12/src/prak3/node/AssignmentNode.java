@@ -30,11 +30,13 @@ public class AssignmentNode extends AbstractNode{
 
     @Override
     public void print() {
+        indent();
         System.out.println(String.format("AssignementNode (l:%d c:%d)",line,column));
         ident.print();
         selector.print();
         System.out.println(":=");
         expression.print();
+        unindent();
     }
     
 }

@@ -28,10 +28,12 @@ public class ExpressionNode extends AbstractNode {
 
 	@Override
 	public void print() {
+            indent();
             System.out.println(String.format("ExpressionNode (l:%d c:%d)",line,column));
             firstSE.print();
             if (operator!=null) System.out.println(operator);
             if (secondSE!=null) secondSE.print();
+            unindent();
 	}
 
 }

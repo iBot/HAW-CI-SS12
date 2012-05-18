@@ -202,50 +202,66 @@ public class SuperParser {
 	 * ---------------------------------------
 	 */
 	
-	public static void identList(){
+	public static IdentListNode identList(){
 		indent();
 		System.out.println(spaces + "IdentList: " + nextsymbol);
+		IdentListNode identList = new IdentListNode("",SuperScanner.yyline, SuperScanner.yycolumn);
 		if(nextsymbol==SuperScanner.ident){
-			insymbol(); 
+			IdentNode i = new IdentNode(SuperScanner.strval ,SuperScanner.yyline, SuperScanner.yycolumn);
+			identList.addNode(i);
+			insymbol();
 		} else {
 			error("Indent expected");
 		}
 		while(nextsymbol == SuperScanner.comma){
 			insymbol();
 			if(nextsymbol==SuperScanner.ident){
+				IdentNode i = new IdentNode(SuperScanner.strval ,SuperScanner.yyline, SuperScanner.yycolumn);
+				identList.addNode(i);
 				insymbol(); 
 			} else {
 				error("Indent expected");
 			}
 		}
-//		if(!(nextsymbol==SuperScanner.dot)){
-//			error("Dot expected");
-//		}
-//		insymbol();
 		unindent();
+		return identList;
 	}
 	
 	/**
 	 * TODO | ArrayType | RecordType. 
 	 * . ?????
 	 */
-	public static void type(){
+	public static TypeNode type(){
 		indent();
+		TypeNode t = null;
 		System.out.println(spaces + "Type: " + nextsymbol);
-		if(!(nextsymbol==SuperScanner.ident)){
+		int column = SuperScanner.yycolumn; 
+		int line = SuperScanner.yyline;
+		if((nextsymbol==SuperScanner.ident)){
+			t = new TypeNode("",line, column, new IdentNode("",SuperScanner.yyline, SuperScanner.yycolumn));
+			insymbol();
+			
+		} else if(nextsymbol==SuperScanner.array){
+			t = new TypeNode("", line, column, arrayType());
+		} else if(nextsymbol==SuperScanner.record){
+			t = new TypeNode("",line, column, recordType());
+		} else {
 			error("Ident expected");
 		}
-		insymbol();
+		
 //		if(!(nextsymbol==SuperScanner.dot)){
 //			error(". erwartet");
 //		}
 //		insymbol();
 		unindent();
+		return t;
 	}
 	
-	public static void arrayType(){
+	public static ArrayTypeNode arrayType(){
 		indent();
 		System.out.println(spaces + "ArrayType: " + nextsymbol);
+		int line = SuperScanner.yyline;
+		int column =  SuperScanner.yycolumn;
 		//ARRAY
 		if(!(nextsymbol==SuperScanner.array)){
 			error("ARRAY expected");
@@ -256,7 +272,7 @@ public class SuperParser {
 			error("[ expected");
 		}
 		insymbol();
-		indexExpression();
+		IndexExpressionNode ie = indexExpression();
 		//]
 		if(!(nextsymbol==SuperScanner.rsquarebraket)){
 			error("] expected");
@@ -267,13 +283,14 @@ public class SuperParser {
 			error("OF expected");
 		}
 		insymbol();
-		type();
+		TypeNode t = type();
 		//.
 //		if(!(nextsymbol==SuperScanner.dot)){
 //			error(". expected");
 //		}
 //		insymbol();
 		unindent();
+		return new ArrayTypeNode("", line, column, ie, t);
 	}
 	
 	public static IndexExpressionNode indexExpression(){
@@ -296,41 +313,38 @@ public class SuperParser {
                 return new IndexExpressionNode("ThisIsTheNameOfAnIndexExpressionNode", ieL, ieC, innerNode);
 	}
 	
-	public static void fieldList(){
+	public static FieldListNode fieldList(){
 		indent();
 		System.out.println(spaces + "FieldList: " + nextsymbol);
+		int column = SuperScanner.yycolumn;
+		int line = SuperScanner.yyline;
+		IdentListNode il = null;
+		TypeNode t = null;
 		if(nextsymbol==SuperScanner.ident){
-			identList();
+			il = identList();
 			// :
 			if(!(nextsymbol==SuperScanner.double_dot)){
 				error(": erwartet");
 			}
 			insymbol();
-			type();
-			//]
-//			if(!(nextsymbol==SuperScanner.rsquarebraket)){
-//				error("[ erwartet");
-//			}
-			//.
-	//		if(!(nextsymbol==SuperScanner.dot)){
-	//			error(". erwartet");
-	//		}
-	//		insymbol();
+			t = type();
 		}
 		unindent();
+		return new FieldListNode("",line, column, il, t);
 	}
 	
-	public static void recordType(){
+	public static RecordTypeNode recordType(){
 		indent();
 		System.out.println(spaces + "RecordType: " + nextsymbol);
+		RecordTypeNode rt = new RecordTypeNode("",SuperScanner.yyline, SuperScanner.yycolumn);
 		if(!(nextsymbol==SuperScanner.record)){
 			error("RECORD erwartet");
 		}
 		insymbol();
-		fieldList();
+		rt.addFieldList(fieldList());
 		while(nextsymbol==SuperScanner.semicolon){
 			insymbol();
-			fieldList();
+			rt.addFieldList(fieldList());
 		}
 		//END
 		if(!(nextsymbol==SuperScanner.endsy)){
@@ -342,35 +356,40 @@ public class SuperParser {
 //		}
 //		insymbol();
 //		unindent();
+		return rt;
 	}
 	
-	public static void fpSection(){
+	public static FPSectionNode fpSection(){
 		indent();
 		System.out.println(spaces + "FPSection: " + nextsymbol);
+		int column = SuperScanner.yycolumn;
+		int line = SuperScanner.yyline;
 		if((nextsymbol==SuperScanner.var)){
 			insymbol();
 		}
-		identList();
+		IdentListNode il = identList();
 		//:
 		if(!(nextsymbol == SuperScanner.double_dot)){
 			error(": erwartet");
 		}
 		insymbol();
-		type();
+		TypeNode t = type();
 //		if(!(nextsymbol == SuperScanner.dot)){
 //			error(". erwartet");
 //		}
 //		insymbol();
 		unindent();
+		return new FPSectionNode("", line, column, il, t);
 	}
 	
-	public static void formalParameters(){
+	public static FormalParametersNode formalParameters(){
 		indent();
 		System.out.println(spaces + "FormalParameters: " + nextsymbol);
-		fpSection();
+		FormalParametersNode fp = new FormalParametersNode("", SuperScanner.yyline, SuperScanner.yycolumn);
+		fp.addFPSection(fpSection());
 		while(nextsymbol==SuperScanner.semicolon){
 			insymbol();
-			fpSection();
+			fp.addFPSection(fpSection());
 		}
 		//.
 //		if(!(nextsymbol == SuperScanner.dot)){
@@ -378,11 +397,14 @@ public class SuperParser {
 //		}
 //		insymbol();
 		unindent();
+		return fp;
 	}
 	
-	public static void procedureHeading(){
+	public static ProcedureHeadingNode procedureHeading(){
 		indent();
 		System.out.println(spaces + "ProcedureHeading: " + nextsymbol);
+		int column = SuperScanner.yycolumn;
+		int line = SuperScanner.yyline;
 		if(!(nextsymbol==SuperScanner.procedure)){
 			error("PROCEDURE erwartet");
 		}
@@ -390,13 +412,15 @@ public class SuperParser {
 		if(!(nextsymbol==SuperScanner.ident)){
 			error("Ident erwartet");
 		}
+		IdentNode ident = new IdentNode(SuperScanner.strval,SuperScanner.yyline, SuperScanner.yycolumn);
 		insymbol();
 		if(!(nextsymbol==SuperScanner.lpar)){
 			error("( erwartet");
 		}
 		insymbol();
+		FormalParametersNode fpn = null;
 		if(!(nextsymbol==SuperScanner.lpar)){
-			formalParameters();
+			fpn = formalParameters();
 		}
 		//)
 		if(!(nextsymbol==SuperScanner.rpar)){
@@ -409,65 +433,80 @@ public class SuperParser {
 //		}
 //		insymbol();
 		unindent();
+		return new ProcedureHeadingNode("", line, column, ident,fpn);
 	}
 	
-	public static void procedureBody(){
+	public static ProcedureBodyNode procedureBody(){
 		indent();
 		System.out.println(spaces + "ProcedureBody: " + nextsymbol);
-		declarations();
+		int column = SuperScanner.yycolumn;
+		int line = SuperScanner.yyline;
+		DeclarationsNode d = declarations();
 		if(!(nextsymbol==SuperScanner.beginsy)){
 			error("Begin erwartet");
 		}
 		insymbol();
-		statementSequence();
+		StatementSequenceNode ss = statementSequence();
 		if(!(nextsymbol==SuperScanner.endsy)){
 			error("end erwartet");
 		}
 		insymbol();
 		unindent();
+		return new ProcedureBodyNode("", line, column, d, ss);
 	}
 	
-	public static void procedureDeclarations(){
+	public static ProcedureDeclarationNode procedureDeclarations(){
 		indent();
 		System.out.println(spaces + "ProcedureDeclarations: " + nextsymbol);
-		procedureHeading();
+		int column = SuperScanner.yycolumn;
+		int line = SuperScanner.yyline;
+		ProcedureHeadingNode heading = procedureHeading();
 		if(!(nextsymbol==SuperScanner.semicolon)){
 			error("; erwartet");
 		}
 		insymbol();
-		procedureBody();
+		ProcedureBodyNode body = procedureBody();
 		if(!(nextsymbol==SuperScanner.ident)){
 			error("ident erwartet");
 		}
+		IdentNode ident = new IdentNode(SuperScanner.strval,SuperScanner.yyline,SuperScanner.yycolumn) ;
 		insymbol();
 		unindent();
+		return new ProcedureDeclarationNode("", line, column, heading, body, ident);
 	}
 	
-	public static void declarations(){
+	public static DeclarationsNode declarations(){
 		indent();
 		System.out.println(spaces + "Declarations: " + nextsymbol);
+		DeclarationsNode d = new DeclarationsNode("", SuperScanner.yyline, SuperScanner.yycolumn);
 		if(nextsymbol==SuperScanner.constt){
 			insymbol();
 			if(!(nextsymbol==SuperScanner.ident)){
 				error("ident erwartet");
 			}
+			IdentNode i = new IdentNode(SuperScanner.strval ,SuperScanner.yyline, SuperScanner.yycolumn);
 			insymbol();
 			if(!(nextsymbol==SuperScanner.equal)){
 				error("= erwartet");
 			}
 			insymbol();
-			expression();
+			ExpressionNode e = expression();
+			AssNode a = new AssNode("",SuperScanner.yyline, SuperScanner.yycolumn,i,e);
+			d.addConst(a);
 			if(!(nextsymbol==SuperScanner.semicolon)){
 				error("; erwartet");
 			}
 			insymbol();
 			while(nextsymbol==SuperScanner.ident){
+				IdentNode ident = new IdentNode(SuperScanner.strval ,SuperScanner.yyline, SuperScanner.yycolumn);
 				insymbol();
 				if(!(nextsymbol==SuperScanner.equal)){
 					error("= erwartet");
 				}
 				insymbol();
-				expression();
+				ExpressionNode expression = expression();
+				AssNode ass = new AssNode("",SuperScanner.yyline, SuperScanner.yycolumn,ident,expression);
+				d.addConst(ass);
 				if(!(nextsymbol==SuperScanner.semicolon)){
 					error("; erwartet");
 				}
@@ -479,23 +518,29 @@ public class SuperParser {
 			if(!(nextsymbol==SuperScanner.ident)){
 				error("ident erwartet");
 			}
+			IdentNode ident = new IdentNode(SuperScanner.strval ,SuperScanner.yyline, SuperScanner.yycolumn);
 			insymbol();
 			if(!(nextsymbol==SuperScanner.equal)){
 				error("= erwartet");
 			}
 			insymbol();
-			type();
+			TypeNode t = type();
+			AssNode a = new AssNode("", SuperScanner.yyline, SuperScanner.yycolumn,ident,t);
+			d.addTyp(a);
 			if(!(nextsymbol==SuperScanner.semicolon)){
 				error("; erwartet");
 			}
 			insymbol();
 			while(nextsymbol==SuperScanner.ident){
+				IdentNode i = new IdentNode(SuperScanner.strval ,SuperScanner.yyline, SuperScanner.yycolumn);
 				insymbol();
 				if(!(nextsymbol==SuperScanner.equal)){
 					error("= erwartet");
 				}
 				insymbol();
-				type();
+				TypeNode type = type();
+				AssNode ass = new AssNode("", SuperScanner.yyline, SuperScanner.yycolumn,i,type);
+				d.addTyp(ass);
 				if(!(nextsymbol==SuperScanner.semicolon)){
 					error("; erwartet");
 				}
@@ -504,31 +549,36 @@ public class SuperParser {
 		}
 		else if(nextsymbol==SuperScanner.var){
 			insymbol();
-			identList();
+			IdentListNode il = identList();
 			if(!(nextsymbol==SuperScanner.double_dot)){
 				error(": erwartet");
 			}
 			insymbol();
-			type();
+			TypeNode t = type();
 			if(!(nextsymbol==SuperScanner.semicolon)){
 				error("; erwartet");
 			}
+			AssNode a = new AssNode("", SuperScanner.yyline, SuperScanner.yycolumn,il,t);
+			d.addVar(a);
 			insymbol();
 			while(nextsymbol==SuperScanner.ident){
-				identList();
+				IdentListNode iln = identList();
 				if(!(nextsymbol==SuperScanner.double_dot)){
 					error(": erwartet");
 				}
 				insymbol();
-				type();
+				TypeNode type = type();
 				if(!(nextsymbol==SuperScanner.semicolon)){
 					error("; erwartet");
 				}
+				AssNode ass = new AssNode("", SuperScanner.yyline, SuperScanner.yycolumn,iln,type);
+				d.addVar(ass);
 				insymbol();
 			}
 		}
 		while(nextsymbol==SuperScanner.procedure){
-			procedureDeclarations();
+			ProcedureDeclarationNode pd = procedureDeclarations();
+			d.addProcedureDeclaration(pd);
 			if(!(nextsymbol==SuperScanner.semicolon)){
 				error("; erwartet");
 			}
@@ -539,11 +589,16 @@ public class SuperParser {
 //		}
 //		insymbol();
 		unindent();
+		return d;
 	}
 	
-	public static void module(){
+	public static ModuleNode module(){
 		indent();
 		System.out.println(spaces + "Module: " + nextsymbol);
+		IdentNode ident1 = null;
+		IdentNode ident2 = null;
+		int column = SuperScanner.yycolumn;
+		int line = SuperScanner.yyline;
 		//'MODULE'
 		if (nextsymbol == SuperScanner.module){
 			insymbol();
@@ -553,6 +608,7 @@ public class SuperParser {
 		
 		//ident
 		if (nextsymbol == SuperScanner.ident){
+			ident1 = new IdentNode(SuperScanner.strval,SuperScanner.yyline,SuperScanner.yycolumn);
 			insymbol();
 		} else {
 			error("ident expected");
@@ -566,7 +622,7 @@ public class SuperParser {
 		}
 		
 		//Declaration
-		declarations();
+		DeclarationsNode d = declarations();
 		
 		//'BEGIN'
 		if (nextsymbol == SuperScanner.beginsy){
@@ -576,7 +632,7 @@ public class SuperParser {
 		}
 		
 		//Declaration
-		statementSequence();
+		StatementSequenceNode ss = statementSequence();
 		
 		//'END'
 		if (nextsymbol == SuperScanner.endsy){
@@ -587,6 +643,7 @@ public class SuperParser {
 		
 		//ident
 		if (nextsymbol == SuperScanner.ident){
+			ident2 = new IdentNode(SuperScanner.strval,SuperScanner.yyline,SuperScanner.yycolumn);
 			insymbol();
 		} else {
 			error("ident expected");
@@ -606,6 +663,7 @@ public class SuperParser {
 //		
 //		insymbol();
 		unindent();
+		return new ModuleNode("", line, column, ident1, d, ss, ident2);
 	}
 	
 	

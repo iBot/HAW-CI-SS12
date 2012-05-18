@@ -28,7 +28,13 @@ public class ArrayTypeNode extends AbstractNode {
 
 	@Override
 	public void print() {
-		// TODO Auto-generated method stub
+		indent();
+		System.out.format("Array: %n, Zeile: %s, Spalte: %s", name, line, column);
+		if(indexExpression!=null){
+				indexExpression.print();
+		}
+		type.print();
+		unindent();
 
 	}
 

@@ -27,7 +27,12 @@ public class IdentListNode extends AbstractNode {
 
 	@Override
 	public void print() {
-		// TODO Auto-generated method stub
+		indent();
+		System.out.format("IdentList: %n, Zeile: %s, Spalte: %s", name, line, column);
+		for(IdentNode n : identList){
+			n.print();
+		}
+		unindent();
 
 	}
 

@@ -27,8 +27,10 @@ public class PromptNode extends AbstractNode{
 
     @Override
     public void print() {
+        indent();
         System.out.println(String.format("PromptNode (l:%d c:%d)",line,column));
         string.print();
+        unindent();
     }
     
 }

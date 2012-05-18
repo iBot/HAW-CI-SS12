@@ -30,7 +30,12 @@ public class ProcedureDeclarationNode extends AbstractNode {
 
 	@Override
 	public void print() {
-		// TODO Auto-generated method stub
+		indent();
+		System.out.format("ProcedureDeclaration: %n, Zeile: %s, Spalte: %s", name, line, column);
+		procedureHeading.print();
+		procedureBody.print();
+		ident.print();
+		unindent();
 
 	}
 

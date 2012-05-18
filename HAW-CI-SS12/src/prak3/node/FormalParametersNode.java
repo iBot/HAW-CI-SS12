@@ -1,10 +1,9 @@
 package prak3.node;
 
+import cip.base.AbstractDescr;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import cip.base.AbstractDescr;
 
 public class FormalParametersNode extends AbstractNode {
 
@@ -32,7 +31,12 @@ public class FormalParametersNode extends AbstractNode {
 
 	@Override
 	public void print() {
-		// TODO Auto-generated method stub
+		indent();
+		System.out.format("FormalParameters: %n, Zeile: %s, Spalte: %s", name, line, column);
+		for(FPSectionNode f : fpsectionList){
+			f.print();
+		}
+		unindent();
 
 	}
 

@@ -32,6 +32,7 @@ public class IfStatementNode extends AbstractNode{
 
     @Override
     public void print() {
+        indent();
         System.out.println(String.format("IfStatementNode (l:%d c:%d)",line,column));
         System.out.println("IF");
         expressions.get(0);
@@ -45,5 +46,6 @@ public class IfStatementNode extends AbstractNode{
             System.out.println("ELSE");
             statements.get(statements.size()-1);
         }
+        unindent();
     }
 }

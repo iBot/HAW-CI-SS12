@@ -31,8 +31,10 @@ public class IntegerNode extends AbstractNode{
 
     @Override
     public void print() {
+        indent();
         System.out.println(String.format("IntegerNode (l:%d c:%d)",line,column));
         System.out.println(value);
+        unindent();
     }
     
 }

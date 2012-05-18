@@ -33,7 +33,13 @@ public class ModuleNode extends AbstractNode {
 
 	@Override
 	public void print() {
-		// TODO Auto-generated method stub
+		indent();
+			System.out.format("Module: %n, Zeile: %s, Spalte: %s", name, line, column);
+			ident1.print();
+			declarations.print();
+			statementSequence.print();
+			ident2.print();
+		unindent();
 
 	}
 

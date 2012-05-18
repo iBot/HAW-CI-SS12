@@ -31,8 +31,15 @@ public class RecordTypeNode extends AbstractNode {
 
 	@Override
 	public void print() {
-		// TODO Auto-generated method stub
+		indent();
+		System.out.format("RecordType: %n, Zeile: %s, Spalte: %s", name, line, column);
+			for(FieldListNode f : fieldList){
+				f.print();
+			}
+		unindent();
 
 	}
+	
+	
 
 }

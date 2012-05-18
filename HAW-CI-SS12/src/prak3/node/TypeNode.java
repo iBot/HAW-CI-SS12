@@ -38,8 +38,16 @@ public class TypeNode extends AbstractNode {
 
 	@Override
 	public void print() {
-		// TODO Auto-generated method stub
-
+		indent();
+		System.out.format("Type: %n, Zeile: %s, Spalte: %s", name, line, column);
+		if(identNode!= null){
+			identNode.print();
+		} else if(recordType!=null){
+			recordType.print();
+		} else if(arrayType!=null){
+			arrayType.print();
+		}
+		unindent();
 	}
 
 }

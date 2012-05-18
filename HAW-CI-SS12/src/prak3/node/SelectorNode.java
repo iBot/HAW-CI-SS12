@@ -29,10 +29,12 @@ public class SelectorNode extends AbstractNode {
 
     @Override
     public void print() {
+        indent();
         System.out.println(String.format("SelectorNode (l:%d c:%d)",line,column));
         for (AbstractNode abstractNode : nodes) {
             abstractNode.print();
         }
+        unindent();
     }
     
 }

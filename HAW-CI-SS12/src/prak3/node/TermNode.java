@@ -33,11 +33,13 @@ public class TermNode extends AbstractNode{
 
     @Override
     public void print() {
+        indent();
         System.out.println(String.format("TermNode (l:%d c:%d)",line,column));
         firstFactor.print();
         for (int i = 0; i<operators.size();i++) {
             System.out.println(operators.get(i));
             factors.get(i).print();
         }
+        unindent();
     }
 }

@@ -29,8 +29,10 @@ public class IndexExpressionNode extends AbstractNode {
 
         @Override
         public void print() {
+            indent();
             System.out.println(String.format("IndexExpressionIdentNode (l:%d c:%d)",line,column));
             innerNode.print();
+            unindent();
         }
 
 }

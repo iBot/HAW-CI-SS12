@@ -29,8 +29,10 @@ public class FactorNode extends AbstractNode{
 
     @Override
     public void print() {
+        indent();
         System.out.println(String.format("FactorNode (l:%d c:%d)",line,column));
         if (ident!=null) ident.print();
         fNode.print();
+        unindent();
     }
 }

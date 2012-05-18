@@ -28,12 +28,13 @@ public class StatementSequenceNode extends AbstractNode {
 
 	@Override
 	public void print() {
+            indent();
             System.out.println(String.format("StatementSequenzeNode (l:%d c:%d)",line,column));
             statement.print();
             for (StatementNode statementNode : additionalStatements) {
                 statementNode.print();
             }
-
+            unindent();
 	}
 
 }

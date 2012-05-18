@@ -34,24 +34,24 @@ public abstract class AbstractNode
 	abstract public void print();
 
 	/**
-	 * Diese Variable steuert die Einr�ckung bei der Ausgabe
+	 * Diese Variable steuert die Einrückung bei der Ausgabe
 	 */
 	private static String spaces = "";
 
 	/**
-	 * Diese Methode ist eine Darstellungshilfe f�r den abstrakten Syntaxbaum.
-	 * Die Einr�ckung wird aufgehoben.
+	 * Diese Methode ist eine Darstellungshilfe für den abstrakten Syntaxbaum.
+	 * Die Einrückung wird aufgehoben.
 	 */
 	public void unindent() {
 		spaces = spaces.substring(2);
 	}
 
-	private void indent() {
+	public void indent() {
 		spaces = spaces + "  ";
 	}
 
 	/**
-	 * Einr�ckungstiefe um zwei Leerzeichen erh�hen und den String ausgeben.
+	 * Einrückungstiefe um zwei Leerzeichen erhöhen und den String ausgeben.
 	 * 
 	 * @param fieldName
 	 */

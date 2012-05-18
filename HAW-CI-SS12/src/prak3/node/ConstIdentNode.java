@@ -28,8 +28,10 @@ public class ConstIdentNode extends AbstractNode{
 
     @Override
     public void print() {
+        indent();
         System.out.println(String.format("ConstIdentNode (l:%d c:%d)",line,column));
         ident.print();
+        unindent();
     }
     
 }

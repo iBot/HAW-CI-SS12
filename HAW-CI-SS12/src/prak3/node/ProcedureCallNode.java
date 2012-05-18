@@ -30,9 +30,11 @@ public class ProcedureCallNode extends AbstractNode{
 
     @Override
     public void print() {
+        indent();
         System.out.println(String.format("ActualParametersNode (l:%d c:%d)",line,column));
         ident.print();
         if (actualParameters!=null) actualParameters.print();
+        unindent();
     }
     
 }

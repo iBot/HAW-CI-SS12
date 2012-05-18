@@ -29,8 +29,10 @@ public class WhileStatementNode extends AbstractNode{
 
     @Override
     public void print() {
+        indent();
         System.out.println(String.format("WhileStatementNode (l:%d c:%d)",line,column));
         expression.print();
         statements.print();
+        unindent();
     }
 }

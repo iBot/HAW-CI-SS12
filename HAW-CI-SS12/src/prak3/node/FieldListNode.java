@@ -28,7 +28,13 @@ public class FieldListNode extends AbstractNode {
 
 	@Override
 	public void print() {
-		// TODO Auto-generated method stub
+		indent();
+		System.out.format("FieldList: %n, Zeile: %s, Spalte: %s", name, line, column);
+			if(identList!=null && type!=null){
+				identList.print();
+				type.print();
+			}
+		unindent();
 
 	}
 

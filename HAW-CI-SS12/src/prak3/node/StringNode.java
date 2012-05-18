@@ -32,8 +32,10 @@ public class StringNode extends AbstractNode{
 
     @Override
     public void print() {
+        indent();
         System.out.println(String.format("StringNode (l:%d c:%d)",line,column));
         System.out.println(value);
+        unindent();
     }
     
 }

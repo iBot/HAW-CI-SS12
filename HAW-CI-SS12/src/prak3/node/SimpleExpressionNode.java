@@ -34,6 +34,7 @@ public class SimpleExpressionNode extends AbstractNode{
 
     @Override
     public void print() {
+        indent();
         System.out.println(String.format("SimpleExpressinNode (l:%d c:%d)",line,column));
         System.out.println((firstIsNegative ? "-" : "+"));
         firstTerm.print();
@@ -41,5 +42,6 @@ public class SimpleExpressionNode extends AbstractNode{
             System.out.println(operators.get(i));
             terms.get(i).print();
         }
+        unindent();
     } 
 }

@@ -1,8 +1,7 @@
 package prak3.node;
 
-import java.util.HashMap;
-
 import cip.base.AbstractDescr;
+import java.util.HashMap;
 
 public class ProcedureHeadingNode extends AbstractNode {
 
@@ -33,7 +32,13 @@ public class ProcedureHeadingNode extends AbstractNode {
 
 	@Override
 	public void print() {
-		// TODO Auto-generated method stub
+		indent();
+		System.out.format("ProcedureHeading: %n, Zeile: %s, Spalte: %s", name, line, column);
+		ident.print();
+		if(formalParameters!=null){
+			formalParameters.print();
+		}
+		unindent();
 
 	}
 

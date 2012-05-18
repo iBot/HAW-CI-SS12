@@ -28,8 +28,10 @@ public class ReadNode extends AbstractNode{
 
     @Override
     public void print() {
+        indent();
         System.out.println(String.format("ReadNode (l:%d c:%d)",line,column));
         if (prompt!=null) prompt.print();
+        unindent();
     }
     
 }

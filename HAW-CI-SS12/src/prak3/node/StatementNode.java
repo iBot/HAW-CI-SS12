@@ -41,7 +41,9 @@ public class StatementNode extends AbstractNode{
 
     @Override
     public void print() {
+        indent();
         System.out.println(String.format("StatementNode (l:%d c:%d)",line,column));
         if (statement!=null) statement.print();
+        unindent();
     }
 }
