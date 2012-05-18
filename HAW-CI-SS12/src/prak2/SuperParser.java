@@ -1,6 +1,8 @@
 package prak2;
 
-import prak3.node.AbstractNode;
+import java.util.ArrayList;
+import java.util.List;
+import prak3.node.*;
 
 public class SuperParser {
 
@@ -67,69 +69,99 @@ public class SuperParser {
 
 	/******************* Ausdrücke ******************/
 
-	static void factor() {
+	public static FactorNode factor() {
 
 		indent();
 		System.out.println(spaces + "factor: " + nextsymbol);
+                
+                int fL = SuperScanner.yyline;
+                int fC = SuperScanner.yycolumn;
+                
+                IdentNode ident = null;
+                AbstractNode fNode = null;
+                
 		if (nextsymbol == SuperScanner.lpar) {
 			insymbol();
-			simpleExpr();
+			fNode=expression();
 			if (nextsymbol == SuperScanner.rpar)
 				insymbol();
 			else
 				error(" ) expected");
 		} else if (nextsymbol == SuperScanner.intconst) {
 			outInt(SuperScanner.intval);
+                        fNode = new IntegerNode("ThisIsTheNameOfAnIntegerNode", fL, fC, SuperScanner.intval);
 			insymbol();
 		} else if (nextsymbol == SuperScanner.ident) {
 			outStr(SuperScanner.strval);
+                        ident = new IdentNode(SuperScanner.strval, fL, fC);
                         insymbol();
-                        selector();
+                        fNode=selector();
 		} else if (nextsymbol == SuperScanner.string){
                         
-                    string();
+                        fNode=string();
+                } else if (nextsymbol == SuperScanner.read){
+                        insymbol();
+                        fNode = read();
                 }
 		unindent();
+                return new FactorNode("ThisIsTheNameOfAFactorNode", fL, fC, fNode, ident);
 	}
 
-	static void term() {
-		int lsy;
-
+	public static TermNode term() {
 		indent();
 		System.out.println(spaces + "term: " + nextsymbol);
 
-		factor();
-		if ((nextsymbol == SuperScanner.multop)
+                int tL = SuperScanner.yyline;
+                int tC = SuperScanner.yycolumn;
+                
+                FactorNode firstFactor=factor();
+                List<Character> operators = new ArrayList<>();
+                List<FactorNode> factors = new ArrayList<>();
+                
+		while ((nextsymbol == SuperScanner.multop)
 				|| (nextsymbol == SuperScanner.divop)) {
-			lsy = nextsymbol;
+                        if (nextsymbol == SuperScanner.multop){
+                            operators.add('*');
+                        } else {
+                            operators.add('/');
+                        }
 			insymbol();
-			term();
-			if (lsy == SuperScanner.multop)
-				outOp("* ");
-			else
-				outOp("/ ");
+			factors.add(factor());
 		}
 		unindent();
+                return new TermNode("ThisIsTheNameOfATermNode", tL, tC, firstFactor, operators, factors);
 	}
 
-	static void simpleExpr() {
-		int lsy;
+	public static SimpleExpressionNode simpleExpr() {
+		
 
+                int sEL = SuperScanner.yyline;
+                int sEC = SuperScanner.yycolumn;
+                List<Character> operators= new ArrayList<>();
+                List<TermNode> terms= new ArrayList<>();
+                
+                boolean isNegative = false;
+                
 		indent();
 		System.out.println(spaces + "simpleExpr: " + nextsymbol);
 
-		term();
-		if ((nextsymbol == SuperScanner.addop)
+                if(nextsymbol == SuperScanner.subop){
+                    isNegative=true;
+                    insymbol();
+                }
+		TermNode firstTerm=term();
+		while ((nextsymbol == SuperScanner.addop)
 				|| (nextsymbol == SuperScanner.subop)) {
-			lsy = nextsymbol;
+                        if (nextsymbol == SuperScanner.addop) {
+                            operators.add('+');
+                        } else {
+                            operators.add('-');
+                        }
 			insymbol();
-			simpleExpr();
-			if (lsy == SuperScanner.addop)
-				outOp("+ ");
-			else
-				outOp("- ");
+			terms.add(term());
 		}
 		unindent();
+                return new SimpleExpressionNode("ThisIsTheNameOfASimpleExpressionNode", sEL, sEC, isNegative, firstTerm, operators, terms);
 	}
 
 	static void sexprSeq() {
@@ -244,17 +276,24 @@ public class SuperParser {
 		unindent();
 	}
 	
-	public static void indexExpression(){
+	public static IndexExpressionNode indexExpression(){
 		indent();
+                int ieL = SuperScanner.yyline;
+                int ieC = SuperScanner.yycolumn;
+                AbstractNode innerNode = null;
+                
 		System.out.println(spaces + "IndexExpresion: " + nextsymbol);
 		if(nextsymbol==SuperScanner.ident){
-			constIdent();
+			innerNode=constIdent();
 		} else if(nextsymbol==SuperScanner.intconst){
+                    
+                        innerNode = new IntegerNode("ThisIsTheNameOfAnIntegerNode", ieL, ieC, SuperScanner.intval);
 			insymbol();
 		} else {
 			error("ConstIdent or Integer expected");
 		}
 		unindent();
+                return new IndexExpressionNode("ThisIsTheNameOfAnIndexExpressionNode", ieL, ieC, innerNode);
 	}
 	
 	public static void fieldList(){
@@ -621,7 +660,7 @@ public class SuperParser {
 						//assignment("Bla"); //OK
 						//actualParameters(); //OK
 						//procedureCall("Bla"); //OK
-                                            
+                                            indexExpression().print();
 					}
 					//	          
 					// Und hier ist Schluss
@@ -635,15 +674,15 @@ public class SuperParser {
 		}
 	}
 	
-	public static void assignment(String ident){
+	public static AssignmentNode assignment(IdentNode ident){
 		indent();
+                int line = SuperScanner.yyline;
+                int column = SuperScanner.yycolumn;
 		System.out.println(spaces + "Assignment: " + nextsymbol);
 		
-		//ident
-		//TODO: ident in Node einf�gen
 		
 		//Selector
-		selector();
+		SelectorNode selector= selector();
 		
 		//:=
 		if(nextsymbol==SuperScanner.decl){
@@ -653,7 +692,7 @@ public class SuperParser {
 		}
 		
 		//Expression
-		expression();
+		ExpressionNode expression = expression();
 		
 		//.
 //		if(!(nextsymbol==SuperScanner.dot)){
@@ -662,21 +701,27 @@ public class SuperParser {
 //		
 //		insymbol();
 		unindent();
+                return new AssignmentNode("ThisIsTheName", line, column, ident,selector , expression);
 	}
 	
-	public static void actualParameters(){
+	public static ActualParametersNode actualParameters(){
 		indent();
+                
+                int apL = SuperScanner.yyline;
+                int apC = SuperScanner.yycolumn;
+                List<ExpressionNode> expressions = new ArrayList<>();
+                
 		System.out.println(spaces + "ActualParameters: " + nextsymbol);
 		
 		//Expression
-		expression();
+		expressions.add(expression());
 		
 		//{','
 		while(nextsymbol == SuperScanner.comma){
 			insymbol();
 			
 			//Expression
-			expression();
+			expressions.add(expression());
 			
 		//}
 		}
@@ -688,14 +733,17 @@ public class SuperParser {
 //		
 //		insymbol();
 		unindent();
+                return new ActualParametersNode("ThisIsANameOfAnActualParametersList", apL, apC, expressions);
 	}
 	
-	public static void procedureCall(String ident){
+	public static ProcedureCallNode procedureCall(IdentNode ident){
 		indent();
 		System.out.println(spaces + "ProcedureCall: " + nextsymbol);
-		
-		//ident
-		//TODO: Identifikator in Node einf�gen
+                
+                int pcL = SuperScanner.yyline;
+                int pcC = SuperScanner.yycolumn;
+                ActualParametersNode ap = null;
+                		
 		
 		//'('
 		if(nextsymbol==SuperScanner.lpar){
@@ -710,7 +758,7 @@ public class SuperParser {
 			insymbol(); 
 		} else {
 			//[ActualParameters]
-			actualParameters();
+			ap = actualParameters();
 			
 			//')'
 			if(nextsymbol==SuperScanner.rpar){
@@ -728,12 +776,17 @@ public class SuperParser {
 //		
 //		insymbol();
 		unindent();
+                return new ProcedureCallNode("ThisIsTheNameOfAProcedureCallNode", pcL, pcC, ident, ap);
 	}
 	
-	public static void ifStatement(){
+	public static IfStatementNode ifStatement(){
 		indent();
 		System.out.println(spaces + "IfStatement: " + nextsymbol);
-		
+		int ifL = SuperScanner.yyline;
+                int ifC = SuperScanner.yycolumn;
+                List<ExpressionNode> expr = new ArrayList<>();
+                List<StatementSequenceNode> stSeq = new ArrayList<>();
+                
 		//'IF'
 		if(nextsymbol==SuperScanner.iff){
 			insymbol(); 
@@ -742,7 +795,7 @@ public class SuperParser {
 		}
 		
 		//Expression
-		expression();
+		expr.add(expression());
 		
 		//'THEN'
 		if(nextsymbol==SuperScanner.thenn){
@@ -752,14 +805,14 @@ public class SuperParser {
 		}
 		
 		//StatementSequence
-		statementSequence();
+		stSeq.add(statementSequence());
 		
 		//{'ELSIF'
 		while(nextsymbol == SuperScanner.elsif){
 			insymbol();
 			
 			//Expression
-			expression();
+			expr.add(expression());
 			
 			//'THEN'
 			if(nextsymbol==SuperScanner.thenn){
@@ -769,7 +822,7 @@ public class SuperParser {
 			}
 			
 			//StatementSequence
-			statementSequence();
+			stSeq.add(statementSequence());
 			
 		//}
 		}
@@ -779,7 +832,7 @@ public class SuperParser {
 			insymbol(); 
 
 			//StatementSequence
-			statementSequence();			
+			stSeq.add(statementSequence());
 		} 
 		
 		//'END'
@@ -795,12 +848,16 @@ public class SuperParser {
 //		}
 //		insymbol();
 		unindent();
+                return new IfStatementNode("ThisIsTheNameOfAIfStatementNode", ifL, ifC, expr, stSeq);
 	}
 	
-	public static void whileStatement(){
+	public static WhileStatementNode whileStatement(){
 		indent();
 		System.out.println(spaces + "WhileStatement: " + nextsymbol);
 		
+                int wL = SuperScanner.yyline;
+                int wC = SuperScanner.yycolumn;
+                
 		//'WHILE'
 		if(nextsymbol==SuperScanner.whilee){
 			insymbol(); 
@@ -809,7 +866,7 @@ public class SuperParser {
 		}
 		
 		//EXPRESSION
-		expression();
+		ExpressionNode expression = expression();
 		
 		//'DO'
 		if(nextsymbol==SuperScanner.doo){
@@ -819,7 +876,7 @@ public class SuperParser {
 		}
 		
 		//StatementSequence
-		statementSequence();
+		StatementSequenceNode statements = statementSequence();
 		
 		//'END'
 		if(nextsymbol==SuperScanner.endsy){
@@ -836,12 +893,16 @@ public class SuperParser {
 //		
 //		insymbol();
 		unindent();
+                return new WhileStatementNode("ThisIsTheNameOfAWhileStatementNode", wL, wC, expression, statements);
 	}
 	
-	public static void repeatStatement(){
+	public static RepeatStatementNode repeatStatement(){
 		indent();
 		System.out.println(spaces + "RepeatStatement: " + nextsymbol);
 		
+                int rL = SuperScanner.yyline;
+                int rC = SuperScanner.yycolumn;
+                
 		//'REPEAT'
 		if(nextsymbol==SuperScanner.repeatt){
 			insymbol(); 
@@ -850,7 +911,7 @@ public class SuperParser {
 		}
 		
 		//StatementSequence
-		statementSequence();
+		StatementSequenceNode statements= statementSequence();
 		
 		//'UNTIL'
 		if(nextsymbol==SuperScanner.untill){
@@ -860,7 +921,7 @@ public class SuperParser {
 		}
 		
 		//Expression
-		expression();
+		ExpressionNode expression = expression();
 		
 		//.
 //		if(!(nextsymbol==SuperScanner.dot)){
@@ -868,39 +929,47 @@ public class SuperParser {
 //		}
 //		insymbol();
 		unindent();
+                return new RepeatStatementNode("ThisIsTheNameOfARepeatStatementNode", rL, rC, statements, expression);
 	}
 	
-	public static void statement(){
+	public static StatementNode statement(){
 		indent();
+
 		System.out.println(spaces + "Statement: " + nextsymbol);
-		
+                
+                int sL = SuperScanner.yyline;
+                int sC = SuperScanner.yycolumn;
+                AbstractNode statement = null;
 		//IfStatement
 		if(nextsymbol==SuperScanner.iff){
-			ifStatement();
+			statement = ifStatement();
 			
 		//WhileStatement
 		} else if(nextsymbol==SuperScanner.whilee) {
-			whileStatement();
+			statement = whileStatement();
 			
 		//RepeateStatement
 		}else if(nextsymbol==SuperScanner.repeatt){
-			repeatStatement();
+			statement = repeatStatement();
 		
 		//'PRINT'	
 		}else if(nextsymbol==SuperScanner.printt){
 			insymbol();
 			
 			//Expression
-			expression();
+			statement = expression();
 			
 		}else if (nextsymbol==SuperScanner.ident){
 			
 			String ident = SuperScanner.strval;
+                        int identL = SuperScanner.yyline;
+                        int identC = SuperScanner.yycolumn;
+                        IdentNode identNode = new IdentNode(ident, identL, identC);
 			insymbol();
 			if (nextsymbol==SuperScanner.lpar) {
-				procedureCall(ident);
+				statement = procedureCall(identNode);
 			} else {
-				assignment(ident);
+				statement = assignment(identNode);
 			}
 			
 		}
@@ -914,21 +983,26 @@ public class SuperParser {
 //		}
 //		insymbol();
 		unindent();
+                return new StatementNode("ThisIsTheNameOfAStatementNode", sL, sC, statement);
 	}
 	
-	public static void statementSequence(){
+	public static StatementSequenceNode statementSequence(){
 		indent();
 		System.out.println(spaces + "StatementSequence: " + nextsymbol);
 		
+                int sSL = SuperScanner.yyline;
+                int sSC = SuperScanner.yycolumn;
+                List<StatementNode> additionalStatements = new ArrayList<>();
+                
 		//Statement
-		statement();
+		StatementNode statement = statement();
 		
 		//{';'
 		while(nextsymbol == SuperScanner.semicolon){
 			insymbol();
 			
 			//Statement
-			statement();
+			additionalStatements.add(statement());
 			
 		//}
 		}
@@ -939,25 +1013,34 @@ public class SuperParser {
 //		}
 //		insymbol();
 		unindent();
+                return new StatementSequenceNode("ThisIsTheNameOfAStatementSequence", sSL, sSC, statement, additionalStatements);
 	}
 	
-	public static void string(){
+	public static StringNode string(){
 		indent();
 		System.out.println(spaces + "String: " + nextsymbol);
-		
+		int stringL=SuperScanner.yyline;
+                int stringC=SuperScanner.yycolumn;
+                String string = null;
 		if (nextsymbol==SuperScanner.string) {
-			insymbol();
+			string = SuperScanner.strval;
+                        insymbol();
 		} else {
 			error("String erwartet");
 		}
 
 		
 		unindent();
+                return new StringNode(string, stringL, stringC);
 	}
 	
-	public static void selector(){
+	public static SelectorNode selector(){
 		indent();
 		System.out.println(spaces + "Selector: " + nextsymbol);
+                
+                int selectorL=SuperScanner.yyline;
+                int selectorC=SuperScanner.yycolumn;
+                List<AbstractNode> nodes = new ArrayList<>();
 		
 		//{'.' | '['
 		if(nextsymbol == SuperScanner.dot || nextsymbol == SuperScanner.lsquarebraket){
@@ -967,13 +1050,14 @@ public class SuperParser {
 					
 					//ident
 					if(nextsymbol==SuperScanner.ident){
+                                                nodes.add(new IdentNode(SuperScanner.strval, SuperScanner.yyline,SuperScanner.yycolumn));
 						insymbol(); 
 					} 
 				} else if(nextsymbol == SuperScanner.lsquarebraket){
 					insymbol();
 					
 					//Expression
-					expression();
+					nodes.add(expression());
 					
 					//']'
 					if(nextsymbol==SuperScanner.rsquarebraket){
@@ -994,20 +1078,23 @@ public class SuperParser {
 //		
 //		insymbol();
 		unindent();
+                
+                return new SelectorNode("ThisIsTheNameOfASelectorNode", selectorL, selectorC, nodes);
 	}
 	
-	public static void read(){
+	public static ReadNode read(){
 		indent();
 		System.out.println(spaces + "Read: " + nextsymbol);
-		
+                int readL = SuperScanner.yyline;
+                int readC = SuperScanner.yycolumn;
+                PromptNode prompt = null;
 		//'READ'
 		if(nextsymbol==SuperScanner.read){
 			insymbol(); 
 			
 			//Prompt
-			//TODO: Wie k�nnen wir auf String pr�fen? Ident ist nicht wirklich = String, oder?
 			if (nextsymbol==SuperScanner.string) {
-				prompt();
+				prompt = prompt();
 			}
 		} else {
 			error("READ expected");
@@ -1019,16 +1106,20 @@ public class SuperParser {
 //		}
 //		insymbol();
 		unindent();
+                return new ReadNode("ThisIsTheNameOfAReadNode", readL, readC, prompt);
 	}
 	
-	public static void prompt(){
+	public static PromptNode prompt(){
 		indent();
 		System.out.println(spaces + "Promt: " + nextsymbol);
 		
+                int promptL = SuperScanner.yyline;
+                int promptC = SuperScanner.yycolumn;
+              
 		//String
-		//TODO: Wie k�nnen wir auf String pr�fen? Ident ist nicht wirklich = String, oder?
+		StringNode string = null;
 		if(nextsymbol==SuperScanner.string){
-			string(); 
+			string=string(); 
 		} else {
 			error("String expected");
 		}
@@ -1039,44 +1130,78 @@ public class SuperParser {
 //		}
 //		insymbol();
 		unindent();
+                return new PromptNode("ThisIsANameOfAPromptNode", promptL, promptC, string);
 	}
 
 	
-	public static void expression(){
+	public static ExpressionNode expression(){
 		indent();
 		System.out.println(spaces + "Expression: " + nextsymbol);
-		
+		int expL = SuperScanner.yyline;
+                int expC = SuperScanner.yycolumn;
+                String operator = null;
+                SimpleExpressionNode secondSE = null;
+                
 		//SimpleExpression
-		simpleExpr();
+		SimpleExpressionNode firstSE = simpleExpr();
 		
-		if (nextsymbol == SuperScanner.equal ||
-			nextsymbol == SuperScanner.sharp ||
-			nextsymbol == SuperScanner.less ||
-			nextsymbol == SuperScanner.less_equal ||
-			nextsymbol == SuperScanner.greater ||
-			nextsymbol == SuperScanner.greater_equal) {
-			
-			insymbol();
-			
-			//SimpleExpression
-			simpleExpr();
-		}
-		
+                
+		if (nextsymbol == SuperScanner.equal) {
+                    insymbol();
+                    operator="=";
+                    insymbol();
+                    //SimpleExpression
+                    secondSE=simpleExpr();
+                } else if (nextsymbol == SuperScanner.sharp){
+                    insymbol();
+                    operator="#";
+                    insymbol();
+                    //SimpleExpression
+                    secondSE=simpleExpr();
+                } else if (nextsymbol == SuperScanner.less) {
+                    insymbol();
+                    operator="<";
+                    insymbol();
+                    //SimpleExpression
+                    secondSE=simpleExpr();
+                } else if (nextsymbol == SuperScanner.less_equal) {
+                    insymbol();
+                    operator="<=";
+                    insymbol();
+                    //SimpleExpression
+                    secondSE=simpleExpr();
+                } else if (nextsymbol == SuperScanner.greater){
+                    insymbol();
+                    operator=">";
+                    insymbol();
+                    //SimpleExpression
+                    secondSE=simpleExpr();
+                } else if (nextsymbol == SuperScanner.greater_equal){
+                    insymbol();
+                    operator=">=";
+                    insymbol();
+                    //SimpleExpression
+                    secondSE=simpleExpr();
+                }
 		//.
 //		if(!(nextsymbol==SuperScanner.dot)){
 //			error("Dot expected");
 //		}
 //		insymbol();
 		unindent();
+                return new ExpressionNode("ThisIsTheNameOfAnExpressionNode", expL, expC, firstSE, operator, secondSE);
 	}
 	
-	public static void constIdent(){
+	public static ConstIdentNode constIdent(){
 		indent();
 		System.out.println(spaces + "ConstIdent: " + nextsymbol);
-		
+                IdentNode ident = null;
+		int constIdentL = SuperScanner.yyline;
+		int constIdentC = SuperScanner.yycolumn;
 		//ident
 		if (nextsymbol == SuperScanner.ident){
-			insymbol();
+                    ident = new IdentNode(SuperScanner.strval, constIdentL, constIdentC);
+                    insymbol();
 		} else {
 			error("ident expected");
 		}
@@ -1087,6 +1212,7 @@ public class SuperParser {
 //		}
 //		insymbol();
 		unindent();
+                return new ConstIdentNode("ThisIsANameOfAConstIdentNode", constIdentL, constIdentC, ident);
 	}
 	
 	

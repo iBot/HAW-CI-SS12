@@ -3,6 +3,7 @@ package prak3.node;
 import java.util.HashMap;
 
 import cip.base.AbstractDescr;
+import java.util.List;
 
 public class StatementSequenceNode extends AbstractNode {
 
@@ -10,10 +11,13 @@ public class StatementSequenceNode extends AbstractNode {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+    private final StatementNode statement;
+    private final List<StatementNode> additionalStatements;
 
-	public StatementSequenceNode(String name, int line, int column) {
+	public StatementSequenceNode(String name, int line, int column, StatementNode statement, List<StatementNode> additionalStatements) {
 		super(name, line, column);
-		// TODO Auto-generated constructor stub
+		this.statement=statement;
+                this.additionalStatements=additionalStatements;
 	}
 
 	@Override
@@ -24,7 +28,11 @@ public class StatementSequenceNode extends AbstractNode {
 
 	@Override
 	public void print() {
-		// TODO Auto-generated method stub
+            System.out.println(String.format("StatementSequenzeNode (l:%d c:%d)",line,column));
+            statement.print();
+            for (StatementNode statementNode : additionalStatements) {
+                statementNode.print();
+            }
 
 	}
 

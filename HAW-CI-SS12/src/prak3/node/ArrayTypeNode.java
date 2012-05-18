@@ -11,10 +11,10 @@ public class ArrayTypeNode extends AbstractNode {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private IndexExpresssionNode indexExpression;
+	private IndexExpressionNode indexExpression;
 	private TypeNode type;
 
-	public ArrayTypeNode(String name, int line, int column, IndexExpresssionNode e, TypeNode t) {
+	public ArrayTypeNode(String name, int line, int column, IndexExpressionNode e, TypeNode t) {
 		super(name, line, column);
 		this.indexExpression = e;
 		this.type = t;

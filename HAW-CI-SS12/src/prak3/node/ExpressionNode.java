@@ -1,8 +1,7 @@
 package prak3.node;
 
-import java.util.HashMap;
-
 import cip.base.AbstractDescr;
+import java.util.HashMap;
 
 public class ExpressionNode extends AbstractNode {
 
@@ -10,10 +9,15 @@ public class ExpressionNode extends AbstractNode {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+    private final String operator;
+    private final SimpleExpressionNode firstSE;
+    private final SimpleExpressionNode secondSE;
 
-	public ExpressionNode(String name, int line, int column) {
+	public ExpressionNode(String name, int line, int column,SimpleExpressionNode firstSE, String operator,SimpleExpressionNode secondSE) {
 		super(name, line, column);
-		// TODO Auto-generated constructor stub
+		this.firstSE=firstSE;
+                this.operator=operator;
+                this.secondSE=secondSE;
 	}
 
 	@Override
@@ -24,8 +28,10 @@ public class ExpressionNode extends AbstractNode {
 
 	@Override
 	public void print() {
-		// TODO Auto-generated method stub
-
+            System.out.println(String.format("ExpressionNode (l:%d c:%d)",line,column));
+            firstSE.print();
+            if (operator!=null) System.out.println(operator);
+            if (secondSE!=null) secondSE.print();
 	}
 
 }
