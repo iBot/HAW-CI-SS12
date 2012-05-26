@@ -1,4 +1,4 @@
-package cip.descriptor;
+package prak3.descr;
 
 import cip.base.AbstractDescr;
 

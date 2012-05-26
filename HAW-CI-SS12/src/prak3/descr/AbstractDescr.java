@@ -1,4 +1,4 @@
-package cip.base;
+package prak3.descr;
 
 import java.io.Serializable;
 
@@ -42,13 +42,13 @@ implements
 	abstract public void print();
 
 	/**
-	 * Diese Variable steuert die Einrückung bei der Ausgabe
+	 * Diese Variable steuert die Einrï¿½ckung bei der Ausgabe
 	 */
 	private static String spaces = "";
 
 	/**
-	 * Diese Methode ist eine Darstellungshilfe für den abstrakten Syntaxbaum.
-	 * Die Einrückung wird aufgehoben.
+	 * Diese Methode ist eine Darstellungshilfe fï¿½r den abstrakten Syntaxbaum.
+	 * Die Einrï¿½ckung wird aufgehoben.
 	 */
 	public void unindent() {
 		spaces = spaces.substring(2);
@@ -59,7 +59,7 @@ implements
 	}
 
 	/**
-	 * Einrückungstiefe um zwei Leerzeichen erhöhen und den String ausgeben.
+	 * Einrï¿½ckungstiefe um zwei Leerzeichen erhï¿½hen und den String ausgeben.
 	 * 
 	 * @param fieldName
 	 */

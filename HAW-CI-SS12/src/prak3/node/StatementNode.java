@@ -6,7 +6,6 @@ package prak3.node;
 
 import cip.base.AbstractDescr;
 import java.util.HashMap;
-import sun.org.mozilla.javascript.internal.ast.IfStatement;
 
 /**
  *

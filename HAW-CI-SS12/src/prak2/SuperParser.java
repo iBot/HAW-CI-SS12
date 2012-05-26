@@ -115,8 +115,8 @@ public class SuperParser {
                 int tC = SuperScanner.yycolumn;
                 
                 FactorNode firstFactor=factor();
-                List<Character> operators = new ArrayList<>();
-                List<FactorNode> factors = new ArrayList<>();
+                List<Character> operators = new ArrayList<Character>();
+                List<FactorNode> factors = new ArrayList<FactorNode>();
                 
 		while ((nextsymbol == SuperScanner.multop)
 				|| (nextsymbol == SuperScanner.divop)) {
@@ -137,8 +137,8 @@ public class SuperParser {
 
                 int sEL = SuperScanner.yyline;
                 int sEC = SuperScanner.yycolumn;
-                List<Character> operators= new ArrayList<>();
-                List<TermNode> terms= new ArrayList<>();
+                List<Character> operators= new ArrayList<Character>();
+                List<TermNode> terms= new ArrayList<TermNode>();
                 
                 boolean isNegative = false;
                 
@@ -767,7 +767,7 @@ public class SuperParser {
                 
                 int apL = SuperScanner.yyline;
                 int apC = SuperScanner.yycolumn;
-                List<ExpressionNode> expressions = new ArrayList<>();
+                List<ExpressionNode> expressions = new ArrayList<ExpressionNode>();
                 
 		System.out.println(spaces + "ActualParameters: " + nextsymbol);
 		
@@ -842,8 +842,8 @@ public class SuperParser {
 		System.out.println(spaces + "IfStatement: " + nextsymbol);
 		int ifL = SuperScanner.yyline;
                 int ifC = SuperScanner.yycolumn;
-                List<ExpressionNode> expr = new ArrayList<>();
-                List<StatementSequenceNode> stSeq = new ArrayList<>();
+                List<ExpressionNode> expr = new ArrayList<ExpressionNode>();
+                List<StatementSequenceNode> stSeq = new ArrayList<StatementSequenceNode>();
                 
 		//'IF'
 		if(nextsymbol==SuperScanner.iff){
@@ -1050,7 +1050,7 @@ public class SuperParser {
 		
                 int sSL = SuperScanner.yyline;
                 int sSC = SuperScanner.yycolumn;
-                List<StatementNode> additionalStatements = new ArrayList<>();
+                List<StatementNode> additionalStatements = new ArrayList<StatementNode>();
                 
 		//Statement
 		StatementNode statement = statement();
@@ -1098,7 +1098,7 @@ public class SuperParser {
                 
                 int selectorL=SuperScanner.yyline;
                 int selectorC=SuperScanner.yycolumn;
-                List<AbstractNode> nodes = new ArrayList<>();
+                List<AbstractNode> nodes = new ArrayList<AbstractNode>();
 		
 		//{'.' | '['
 		if(nextsymbol == SuperScanner.dot || nextsymbol == SuperScanner.lsquarebraket){
