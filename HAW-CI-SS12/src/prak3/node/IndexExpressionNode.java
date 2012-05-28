@@ -1,8 +1,10 @@
 package prak3.node;
 
 import java.util.HashMap;
+import prak2.CodeGenerator;
 
 import prak3.descr.AbstractDescr;
+import prak3.descr.IntConstDescr;
 
 public class IndexExpressionNode extends AbstractNode  implements Node {
 
@@ -24,7 +26,10 @@ public class IndexExpressionNode extends AbstractNode  implements Node {
         
         @Override
         public AbstractDescr compile(HashMap<String, AbstractDescr> symbolTable) {
-            System.err.println("Bllaaa");
+            AbstractDescr compile = innerNode.compile(symbolTable);
+            IntConstDescr icd = (IntConstDescr)compile;
+            int value = icd.getIntVal();
+            CodeGenerator.writeln("PUSHI, "+value);
             return null;
         }
 

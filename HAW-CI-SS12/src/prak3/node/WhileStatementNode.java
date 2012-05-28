@@ -4,8 +4,8 @@
  */
 package prak3.node;
 
-import prak3.descr.AbstractDescr;
 import java.util.HashMap;
+import prak3.descr.AbstractDescr;
 
 /**
  *

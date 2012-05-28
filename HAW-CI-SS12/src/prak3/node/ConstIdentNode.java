@@ -6,6 +6,7 @@ package prak3.node;
 
 import prak3.descr.AbstractDescr;
 import java.util.HashMap;
+import prak3.descr.IntConstDescr;
 
 /**
  *
@@ -22,8 +23,9 @@ public class ConstIdentNode extends AbstractNode implements Node {
     }
     
     @Override
-    public AbstractDescr compile(HashMap<String, AbstractDescr> symbolTable) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public IntConstDescr compile(HashMap<String, AbstractDescr> symbolTable) {
+        int value = ((IntConstDescr)symbolTable.get(ident)).getIntVal();
+        return new IntConstDescr(value);
     }
 
     @Override

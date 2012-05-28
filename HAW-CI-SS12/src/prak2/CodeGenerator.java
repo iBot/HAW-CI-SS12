@@ -44,6 +44,7 @@ public class CodeGenerator {
     public static void writeln(String codeline){
         try {
             out.write(codeline);
+            out.write("\n");
         } catch (IOException ex) {
             System.err.println("Error: " + ex.getMessage());
         }
