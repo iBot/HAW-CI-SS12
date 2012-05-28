@@ -1,10 +1,9 @@
 package prak3.node;
 
 import java.util.HashMap;
+import prak3.descr.AbstractDescr;
 
-import cip.base.AbstractDescr;
-
-public class FieldListNode extends AbstractNode {
+public class FieldListNode extends AbstractNode implements Node  {
 
 	/**
 	 * 

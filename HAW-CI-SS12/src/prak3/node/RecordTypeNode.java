@@ -3,10 +3,9 @@ package prak3.node;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import prak3.descr.AbstractDescr;
 
-import cip.base.AbstractDescr;
-
-public class RecordTypeNode extends AbstractNode {
+public class RecordTypeNode extends AbstractNode implements Node  {
 
 	/**
 	 * 

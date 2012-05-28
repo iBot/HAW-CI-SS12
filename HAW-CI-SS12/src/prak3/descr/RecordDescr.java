@@ -2,7 +2,7 @@ package prak3.descr;
 
 import java.util.*;
 
-import cip.base.AbstractDescr;
+
 
 public class RecordDescr extends AbstractDescr {
 

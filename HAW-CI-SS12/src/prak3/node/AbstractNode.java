@@ -2,8 +2,7 @@ package prak3.node;
 
 import java.io.Serializable;
 import java.util.HashMap;
-
-import cip.base.AbstractDescr;
+import prak3.descr.AbstractDescr;
 
 
 
@@ -15,7 +14,7 @@ import cip.base.AbstractDescr;
  */
 public abstract class AbstractNode
         implements
-		Serializable {
+		Serializable, Node {
 
 	private static final long serialVersionUID = 1L;
 	

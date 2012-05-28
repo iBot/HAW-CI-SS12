@@ -1,10 +1,9 @@
 package prak3.node;
 
 import java.util.HashMap;
+import prak3.descr.AbstractDescr;
 
-import cip.base.AbstractDescr;
-
-public class IdentNode extends AbstractNode {
+public class IdentNode extends AbstractNode implements Node  {
 
 	public IdentNode(String name, int line, int column) {
 		super(name, line, column);

@@ -2,7 +2,7 @@ package prak3.descr;
 
 import java.util.ArrayList;
 
-import cip.base.AbstractDescr;
+
 
 public class ProcedureDescr extends AbstractDescr {
 

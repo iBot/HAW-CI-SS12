@@ -1,6 +1,6 @@
 package prak3.descr;
 
-import cip.base.AbstractDescr;
+
 
 public class ArrayDescr extends AbstractDescr {
 

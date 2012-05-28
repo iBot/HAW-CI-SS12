@@ -1,11 +1,10 @@
 package prak3.node;
 
 import java.util.HashMap;
-
-import cip.base.AbstractDescr;
+import prak3.descr.AbstractDescr;
 import java.util.List;
 
-public class StatementSequenceNode extends AbstractNode {
+public class StatementSequenceNode extends AbstractNode  implements Node {
 
 	/**
 	 * 

@@ -1,9 +1,8 @@
 package prak3.node;
-
-import cip.base.AbstractDescr;
+import prak3.descr.AbstractDescr;
 import java.util.HashMap;
 
-public class ExpressionNode extends AbstractNode {
+public class ExpressionNode extends AbstractNode  implements Node {
 
 	/**
 	 * 

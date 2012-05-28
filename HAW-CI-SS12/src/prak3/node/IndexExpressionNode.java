@@ -2,9 +2,9 @@ package prak3.node;
 
 import java.util.HashMap;
 
-import cip.base.AbstractDescr;
+import prak3.descr.AbstractDescr;
 
-public class IndexExpressionNode extends AbstractNode {
+public class IndexExpressionNode extends AbstractNode  implements Node {
 
 	/**
 	 * 
@@ -24,7 +24,8 @@ public class IndexExpressionNode extends AbstractNode {
         
         @Override
         public AbstractDescr compile(HashMap<String, AbstractDescr> symbolTable) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            System.err.println("Bllaaa");
+            return null;
         }
 
         @Override

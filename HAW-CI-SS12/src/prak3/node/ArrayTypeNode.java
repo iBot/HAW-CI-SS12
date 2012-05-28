@@ -2,9 +2,9 @@ package prak3.node;
 
 import java.util.HashMap;
 
-import cip.base.AbstractDescr;
+import prak3.descr.AbstractDescr;
 
-public class ArrayTypeNode extends AbstractNode {
+public class ArrayTypeNode extends AbstractNode implements Node {
 
 	/**
 	 * 

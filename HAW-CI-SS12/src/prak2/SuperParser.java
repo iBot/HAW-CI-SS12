@@ -718,7 +718,8 @@ public class SuperParser {
 						//assignment("Bla"); //OK
 						//actualParameters(); //OK
 						//procedureCall("Bla"); //OK
-                                            indexExpression().print();
+                                            //indexExpression().print();
+                                            CodeGenerator.generateCode(indexExpression());
 					}
 					//	          
 					// Und hier ist Schluss

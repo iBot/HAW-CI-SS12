@@ -4,14 +4,14 @@
  */
 package prak3.node;
 
-import cip.base.AbstractDescr;
+import prak3.descr.AbstractDescr;
 import java.util.HashMap;
 
 /**
  *
  * @author Tobi
  */
-public class StringNode extends AbstractNode{
+public class StringNode extends AbstractNode implements Node {
     
 	private static final long serialVersionUID = 1L;
     private String value;

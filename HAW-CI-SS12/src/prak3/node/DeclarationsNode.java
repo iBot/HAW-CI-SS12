@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import cip.base.AbstractDescr;
+import prak3.descr.AbstractDescr;
 
-public class DeclarationsNode extends AbstractNode {
+public class DeclarationsNode extends AbstractNode  implements Node {
 
 	/**
 	 * 

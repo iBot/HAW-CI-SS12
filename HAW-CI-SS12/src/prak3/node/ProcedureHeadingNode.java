@@ -1,9 +1,8 @@
 package prak3.node;
-
-import cip.base.AbstractDescr;
+import prak3.descr.AbstractDescr;
 import java.util.HashMap;
 
-public class ProcedureHeadingNode extends AbstractNode {
+public class ProcedureHeadingNode extends AbstractNode implements Node  {
 
 	/**
 	 * 

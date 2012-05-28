@@ -1,11 +1,10 @@
 package prak3.node;
-
-import cip.base.AbstractDescr;
+import prak3.descr.AbstractDescr;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class FormalParametersNode extends AbstractNode {
+public class FormalParametersNode extends AbstractNode implements Node  {
 
 	/**
 	 * 

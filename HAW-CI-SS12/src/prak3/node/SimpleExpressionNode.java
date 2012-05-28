@@ -4,15 +4,15 @@
  */
 package prak3.node;
 
-import cip.base.AbstractDescr;
 import java.util.HashMap;
 import java.util.List;
+import prak3.descr.AbstractDescr;
 
 /**
  *
  * @author Tobi
  */
-public class SimpleExpressionNode extends AbstractNode{
+public class SimpleExpressionNode extends AbstractNode implements Node {
     private static final long serialVersionUID = 1L;
     private final TermNode firstTerm;
     private final List<Character> operators;
@@ -29,7 +29,8 @@ public class SimpleExpressionNode extends AbstractNode{
     
     @Override
     public AbstractDescr compile(HashMap<String, AbstractDescr> symbolTable) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        System.err.println("Bllaaa");
+        return null;
     }
 
     @Override

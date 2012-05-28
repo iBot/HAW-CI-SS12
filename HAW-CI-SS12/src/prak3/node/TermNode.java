@@ -4,7 +4,7 @@
  */
 package prak3.node;
 
-import cip.base.AbstractDescr;
+import prak3.descr.AbstractDescr;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author Tobi
  */
-public class TermNode extends AbstractNode{
+public class TermNode extends AbstractNode implements Node {
      private static final long serialVersionUID = 1L;
     private final FactorNode firstFactor;
     private final List<Character> operators;

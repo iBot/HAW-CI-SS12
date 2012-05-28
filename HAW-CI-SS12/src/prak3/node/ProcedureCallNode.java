@@ -3,15 +3,14 @@
  * and open the template in the editor.
  */
 package prak3.node;
-
-import cip.base.AbstractDescr;
+import prak3.descr.AbstractDescr;
 import java.util.HashMap;
 
 /**
  *
  * @author Tobi
  */
-public class ProcedureCallNode extends AbstractNode{
+public class ProcedureCallNode extends AbstractNode implements Node {
 
     private static final long serialVersionUID = 1L;
     private final ActualParametersNode actualParameters;

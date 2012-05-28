@@ -3,8 +3,7 @@
  * and open the template in the editor.
  */
 package prak3.node;
-
-import cip.base.AbstractDescr;
+import prak3.descr.AbstractDescr;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
  *
  * @author Tobi
  */
-public class IfStatementNode extends AbstractNode{
+public class IfStatementNode extends AbstractNode implements Node {
     
     private static final long serialVersionUID = 1L;
     private final List<ExpressionNode> expressions;
@@ -27,7 +26,8 @@ public class IfStatementNode extends AbstractNode{
     
     @Override
     public AbstractDescr compile(HashMap<String, AbstractDescr> symbolTable) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        System.err.println("Bllaaa");
+        return null;
     }
 
     @Override

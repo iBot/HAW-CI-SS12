@@ -2,7 +2,7 @@ package prak3.descr;
 
 import java.io.Serializable;
 
-import cip.debug.Debug;
+//import cip.debug.Debug;
 
 /**
  * 
@@ -28,7 +28,8 @@ implements
 
 	public AbstractDescr() {
 		this.size = 0;
-		this.level = CodeGen.level;
+                this.level = 0;
+//		this.level = CodeGen.level;
 	}
 
 	public void setSize(int fs) {
@@ -65,7 +66,7 @@ implements
 	 */
 	public void trace(String s) {
 		this.indent();
-		if (Debug.debug > 0) System.out.println(spaces + s);
+//		if (Debug.debug > 0) System.out.println(spaces + s);
 	}
 
 }
