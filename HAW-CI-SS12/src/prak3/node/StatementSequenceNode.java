@@ -21,7 +21,10 @@ public class StatementSequenceNode extends AbstractNode  implements Node {
 
 	@Override
 	public AbstractDescr compile(HashMap<String, AbstractDescr> symbolTable) {
-		// TODO Auto-generated method stub
+		statement.compile(symbolTable);
+                for (StatementNode statementNode : additionalStatements) {
+                    statementNode.compile(symbolTable);
+                }
 		return null;
 	}
 
