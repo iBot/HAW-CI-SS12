@@ -7,6 +7,7 @@ package prak3.node;
 import prak3.descr.AbstractDescr;
 import java.util.HashMap;
 import java.util.List;
+import static prak2.CodeGenerator.*;
 
 /**
  *
@@ -28,7 +29,19 @@ public class TermNode extends AbstractNode implements Node {
     
     @Override
     public AbstractDescr compile(HashMap<String, AbstractDescr> symbolTable) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        firstFactor.compile(symbolTable);
+        for (int i = 0; i < operators.size(); i++) {
+            factors.get(i).compile(symbolTable);
+            char op = operators.get(i);
+            if (op=='*') {
+                writeln("MUL");
+            } else if (op=='/'){
+                writeln("DIV");
+            } else {
+                throw new Error("Wrong operator. Expected: * or /. Result: "+op);
+            }
+        }
+        return null;
     }
 
     @Override

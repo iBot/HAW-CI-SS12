@@ -6,6 +6,7 @@ package prak3.node;
 import prak3.descr.AbstractDescr;
 import java.util.HashMap;
 import java.util.List;
+import static prak2.CodeGenerator.*;
 
 /**
  *
@@ -26,7 +27,27 @@ public class IfStatementNode extends AbstractNode implements Node {
     
     @Override
     public AbstractDescr compile(HashMap<String, AbstractDescr> symbolTable) {
-        System.err.println("Bllaaa");
+        String end = getLabel();
+        String nextCase = getLabel();
+        expressions.get(0).compile(symbolTable);
+        writeln("BF, "+nextCase);
+        statements.get(0).compile(symbolTable);
+        writeln("JMP, "+end);
+        for (int i = 1; i < expressions.size(); i++){
+            writeln(nextCase+":");
+            nextCase = getLabel();
+            expressions.get(i).compile(symbolTable);
+            writeln("BF, "+nextCase);
+            statements.get(i).compile(symbolTable);
+            writeln("JMP, "+end);
+        }
+        if (statements.size()+1==expressions.size()){
+            writeln(nextCase+":");
+            nextCase = end;
+            statements.get(statements.size()-1).compile(symbolTable);
+        }
+        writeln(nextCase+":");
+        writeln(end+":");
         return null;
     }
 
@@ -35,16 +56,18 @@ public class IfStatementNode extends AbstractNode implements Node {
         indent();
         System.out.println(String.format("IfStatementNode (l:%d c:%d)",line,column));
         System.out.println("IF");
-        expressions.get(0);
-        statements.get(0);
+        expressions.get(0).print();
+        System.out.println("THEN");
+        statements.get(0).print();
         for (int i = 1; i < expressions.size(); i++) {
             System.out.println("ELSEIF");
-            expressions.get(i);
-            statements.get(i);
+            expressions.get(i).print();
+            System.out.println("THEN");
+            statements.get(i).print();
         }
         if (statements.size()+1==expressions.size()){
             System.out.println("ELSE");
-            statements.get(statements.size()-1);
+            statements.get(statements.size()-1).print();
         }
         unindent();
     }

@@ -83,27 +83,34 @@ public class SuperParser {
 		if (nextsymbol == SuperScanner.lpar) {
 			insymbol();
 			fNode=expression();
+                        
 			if (nextsymbol == SuperScanner.rpar)
 				insymbol();
 			else
 				error(" ) expected");
+                        
 		} else if (nextsymbol == SuperScanner.intconst) {
 			outInt(SuperScanner.intval);
                         fNode = new IntegerNode("ThisIsTheNameOfAnIntegerNode", fL, fC, SuperScanner.intval);
+                        
 			insymbol();
 		} else if (nextsymbol == SuperScanner.ident) {
 			outStr(SuperScanner.strval);
                         ident = new IdentNode(SuperScanner.strval, fL, fC);
                         insymbol();
                         fNode=selector();
+                        
 		} else if (nextsymbol == SuperScanner.string){
                         
                         fNode=string();
                 } else if (nextsymbol == SuperScanner.read){
                         insymbol();
                         fNode = read();
+                } else {
+                    if (fNode == null ) throw new Error(String.format("Fnode is null @ line %d; column %d", fL, fC));
                 }
 		unindent();
+                
                 return new FactorNode("ThisIsTheNameOfAFactorNode", fL, fC, fNode, ident);
 	}
 
@@ -673,7 +680,7 @@ public class SuperParser {
 	 */
 
 	public static void main(String[] argv) {
-		System.out.println("SimpleExpression Version 0.0");
+		System.out.println("Main Version 0.0");
 
 		if (argv.length == 0) {
 			System.out.println("Usage : java MySexprParserMain1 <inputfile>");
@@ -707,7 +714,7 @@ public class SuperParser {
 						//expression(); //OK
 						//selector();   //OK
 						//factor();     //OK
-						//ifStatement();    //OK
+//						ifStatement();    //OK
                                                 //whileStatement();   //OK
                                                 //repeatStatement();  //OK
 						//statement();  //OK
@@ -719,7 +726,8 @@ public class SuperParser {
 						//actualParameters(); //OK
 						//procedureCall("Bla"); //OK
                                             //indexExpression().print();
-                                            CodeGenerator.generateCode(indexExpression());
+//                                            factor().print();
+                                            CodeGenerator.generateCode(factor());
 					}
 					//	          
 					// Und hier ist Schluss
@@ -1100,7 +1108,7 @@ public class SuperParser {
                 int selectorL=SuperScanner.yyline;
                 int selectorC=SuperScanner.yycolumn;
                 List<AbstractNode> nodes = new ArrayList<AbstractNode>();
-		
+
 		//{'.' | '['
 		if(nextsymbol == SuperScanner.dot || nextsymbol == SuperScanner.lsquarebraket){
 			while(nextsymbol == SuperScanner.dot || nextsymbol == SuperScanner.lsquarebraket){
@@ -1112,12 +1120,13 @@ public class SuperParser {
                                                 nodes.add(new IdentNode(SuperScanner.strval, SuperScanner.yyline,SuperScanner.yycolumn));
 						insymbol(); 
 					} 
+                                        
+					
 				} else if(nextsymbol == SuperScanner.lsquarebraket){
 					insymbol();
 					
 					//Expression
-					nodes.add(expression());
-					
+					nodes.add(expression());                             
 					//']'
 					if(nextsymbol==SuperScanner.rsquarebraket){
 						insymbol(); 
@@ -1128,7 +1137,7 @@ public class SuperParser {
 				
 			//}
 			}
-		} 
+		}
 		
 		//.
 //		if(!(nextsymbol==SuperScanner.dot)){

@@ -3,8 +3,9 @@
  * and open the template in the editor.
  */
 package prak3.node;
-import prak3.descr.AbstractDescr;
 import java.util.HashMap;
+import prak3.descr.AbstractDescr;
+import static prak2.CodeGenerator.*;
 
 /**
  *
@@ -22,7 +23,12 @@ public class RepeatStatementNode extends AbstractNode implements Node {
     }
     @Override
     public AbstractDescr compile(HashMap<String, AbstractDescr> symbolTable) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String start = getLabel();
+        writeln(start+":");
+        statements.compile(symbolTable);
+        expression.compile(symbolTable);
+        writeln("BF, "+start);
+        return null;
     }
 
     @Override

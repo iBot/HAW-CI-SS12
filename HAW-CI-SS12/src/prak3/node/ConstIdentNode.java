@@ -14,7 +14,7 @@ import prak3.descr.IntConstDescr;
  */
 public class ConstIdentNode extends AbstractNode implements Node {
     
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     private final IdentNode ident;
 
     public ConstIdentNode(String name, int line, int column, IdentNode ident){

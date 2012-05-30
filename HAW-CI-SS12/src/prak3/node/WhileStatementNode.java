@@ -5,6 +5,8 @@
 package prak3.node;
 
 import java.util.HashMap;
+import static prak2.CodeGenerator.getLabel;
+import static prak2.CodeGenerator.writeln;
 import prak3.descr.AbstractDescr;
 
 /**
@@ -24,7 +26,15 @@ public class WhileStatementNode extends AbstractNode implements Node {
     }
     @Override
     public AbstractDescr compile(HashMap<String, AbstractDescr> symbolTable) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String start = getLabel();
+        String end = getLabel();
+        writeln(start+":");
+        expression.compile(symbolTable);
+        writeln("BF, "+end);
+        statements.compile(symbolTable);
+        writeln("JMP, "+start);
+        writeln(end+":");
+        return null;
     }
 
     @Override

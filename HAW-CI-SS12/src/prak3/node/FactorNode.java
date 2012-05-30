@@ -5,6 +5,7 @@
 package prak3.node;
 import prak3.descr.AbstractDescr;
 import java.util.HashMap;
+import prak2.CodeGenerator;
 
 /**
  *
@@ -23,7 +24,9 @@ public class FactorNode extends AbstractNode implements Node {
     
     @Override
     public AbstractDescr compile(HashMap<String, AbstractDescr> symbolTable) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (ident!=null) ident.compile(symbolTable);
+        fNode.compile(symbolTable);
+        return null;
     }
 
     @Override

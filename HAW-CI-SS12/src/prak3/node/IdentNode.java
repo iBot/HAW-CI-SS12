@@ -12,14 +12,15 @@ public class IdentNode extends AbstractNode implements Node  {
 
 	@Override
 	public AbstractDescr compile(HashMap<String, AbstractDescr> symbolTable) {
-		// TODO Auto-generated method stub
+                AbstractDescr ad = symbolTable.get(name);
+                
 		return null;
 	}
 
 	@Override
 	public void print() {
 		indent();
-			System.out.format("Indent: %s, Zeile: %s, Spalte: %s",name,line,column);
+			System.out.println(String.format("Ident: %s, Zeile: %s, Spalte: %s",name,line,column));
 		unindent();
 	}
 
