@@ -32,14 +32,14 @@ public class IfStatementNode extends AbstractNode implements Node {
         expressions.get(0).compile(symbolTable);
         writeln("BF, "+nextCase);
         statements.get(0).compile(symbolTable);
-        writeln("JMP, "+end);
+        writeln("JUMP, "+end);
         for (int i = 1; i < expressions.size(); i++){
             writeln(nextCase+":");
             nextCase = getLabel();
             expressions.get(i).compile(symbolTable);
             writeln("BF, "+nextCase);
             statements.get(i).compile(symbolTable);
-            writeln("JMP, "+end);
+            writeln("JUMP, "+end);
         }
         if (statements.size()+1==expressions.size()){
             writeln(nextCase+":");

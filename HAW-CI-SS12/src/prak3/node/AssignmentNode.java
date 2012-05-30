@@ -5,6 +5,7 @@
 package prak3.node;
 import prak3.descr.AbstractDescr;
 import java.util.HashMap;
+import static prak2.CodeGenerator.*;
 
 /**
  *
@@ -24,7 +25,13 @@ public class AssignmentNode extends AbstractNode implements Node {
     }
     @Override
     public AbstractDescr compile(HashMap<String, AbstractDescr> symbolTable) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        expression.compile(symbolTable);
+        int address; //TODO:
+        if (true) throw new Error("Ident-Adresse muss an address zugewiesen werden");
+        ident.compile(symbolTable);
+        writeln("ASSIGN, 1");
+        
+        return null;
     }
 
     @Override

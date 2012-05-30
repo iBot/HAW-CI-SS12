@@ -32,7 +32,7 @@ public class WhileStatementNode extends AbstractNode implements Node {
         expression.compile(symbolTable);
         writeln("BF, "+end);
         statements.compile(symbolTable);
-        writeln("JMP, "+start);
+        writeln("JUMP, "+start);
         writeln(end+":");
         return null;
     }
