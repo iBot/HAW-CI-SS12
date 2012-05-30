@@ -27,7 +27,8 @@ public class StringNode extends AbstractNode implements Node {
     
     @Override
     public AbstractDescr compile(HashMap<String, AbstractDescr> symbolTable) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        //TODO:
+        throw new Error("Wie wirde ein String compiliert? Ich kann ihn ja nicht komplett auf den Stack schreiben, oder?");
     }
 
     @Override

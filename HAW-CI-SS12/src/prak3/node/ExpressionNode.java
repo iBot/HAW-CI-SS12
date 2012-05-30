@@ -1,6 +1,7 @@
 package prak3.node;
 import prak3.descr.AbstractDescr;
 import java.util.HashMap;
+import static prak2.CodeGenerator.*;
 
 public class ExpressionNode extends AbstractNode  implements Node {
 
@@ -21,7 +22,26 @@ public class ExpressionNode extends AbstractNode  implements Node {
 
 	@Override
 	public AbstractDescr compile(HashMap<String, AbstractDescr> symbolTable) {
-		// TODO Auto-generated method stub
+		firstSE.compile(symbolTable);
+                if (secondSE!=null){
+                    secondSE.compile(symbolTable);
+                    if (operator.equals("=")){
+                        writeln("EQ");
+                    } else if (operator.equals("#")){
+                        writeln("NEQ");
+                    } else if (operator.equals("<")){
+                        writeln("LT");
+                    } else if (operator.equals("<=")){
+                        writeln("LE");
+                    } else if (operator.equals(">")){
+                        writeln("GT");
+                    } else if (operator.equals(">=")){
+                        writeln("GE");
+                    } else {
+                        throw new Error(String.format("Illegal Operator: %s is not allowed",operator));
+                    }
+                }
+                
 		return null;
 	}
 

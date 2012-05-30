@@ -23,7 +23,15 @@ public class SelectorNode extends AbstractNode implements Node  {
     
     @Override
     public AbstractDescr compile(HashMap<String, AbstractDescr> symbolTable) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        for (Node node : nodes) {
+            if (node instanceof IdentNode){
+                node.compile(symbolTable);
+            } else{
+                node.compile(symbolTable);
+            }
+                
+        }
+        return null;
     }
 
     @Override

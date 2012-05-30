@@ -7,6 +7,7 @@ package prak3.node;
 import java.util.HashMap;
 import java.util.List;
 import prak3.descr.AbstractDescr;
+import static prak2.CodeGenerator.*;
 
 /**
  *
@@ -29,7 +30,20 @@ public class SimpleExpressionNode extends AbstractNode implements Node {
     
     @Override
     public AbstractDescr compile(HashMap<String, AbstractDescr> symbolTable) {
-        System.err.println("Bllaaa");
+        firstTerm.compile(symbolTable);
+        if (firstIsNegative){
+            writeln("PUSHI, -1");
+            writeln("MUL");
+        }
+        for (int i = 0; i<operators.size();i++) {
+            terms.get(i).compile(symbolTable);
+            char op = operators.get(i);
+            if (op=='+') {
+                writeln("ADD");
+            } else if (op=='-'){
+                writeln("SUB");
+            }
+        }
         return null;
     }
 

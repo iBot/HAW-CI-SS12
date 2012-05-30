@@ -34,7 +34,11 @@ public class StatementNode extends AbstractNode implements Node {
     
     @Override
     public AbstractDescr compile(HashMap<String, AbstractDescr> symbolTable) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (statement instanceof ExpressionNode){
+            throw new Error("Wie lautet der zu erzeugende Code für 'PRINT'");
+        }
+        statement.compile(symbolTable);
+        return null;
     }
 
     @Override
